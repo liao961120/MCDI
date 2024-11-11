@@ -3,9 +3,9 @@ Age of Acquisition of 696 Words in Mandarin (Taiwan)
 
 The distributions of ages at which words are produced are shown in the figures below. These age distributions were calculated from data collected by Liu & Tsao (2010), available from the Wordbank project (Frank et al., 2017) at <https://github.com/langcog/wordbank>.
 
-下圖為696個華語詞彙產出的年齡分配。這些分配是根據 Liu 與 Tsao (2010) 所收集之 MCDI 資料計算而得。原始資料來源為 Wordbank 專案 (Frank 等，2017): <https://github.com/langcog/wordbank>。
-
 <img src="made/distribution_per_word.png" width="80%">
+
+下圖為696個華語詞彙產出的年齡分配。這些分配是根據 Liu 與 Tsao (2010) 所收集之 MCDI 資料計算而得。原始資料來源為 Wordbank 專案 (Frank 等，2017): <https://github.com/langcog/wordbank>。
 
 <img src="made/AoA-all.png" width="60%">
 

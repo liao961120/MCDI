@@ -60,9 +60,28 @@ dm$age.30 = word_age(dm$age_distr, cuttoff=.3, Max=40)
 dm = dm %>% 
     mutate(n = sapply(strsplit(age_distr, "|", fixed=T), \(x) sum(as.integer(x))) ) %>% 
     filter(n > 50) %>%   # ID:189,182,185 samp_size <= 8
+    mutate(bin = case_when(
+                       age.50 < 18 ~  "12~18",
+        18 <= age.50 & age.50 < 24 ~  "18~24",
+        24 <= age.50 & age.50 < 30 ~  "24~30",
+        30 <= age.50 & age.50 < 36 ~  "30~36",
+        TRUE                       ~  "大於36"
+    )) %>% 
+    mutate(bin = ordered(bin, levels = c("12~18","18~24","24~30","30~36","大於36") )) %>% 
+    mutate(category = factor(category, levels=c('people', 
+                                                'games_routines', 'action_words', 
+                                                'food_drink', 'animals', 'outside',  
+                                                'vehicles', 'toys', 
+                                                'clothing', 'body_parts', 
+                                                'furniture_rooms', 'household', 
+                                                'descriptive_words', 
+                                                'quantifiers', 
+                                                'locations',  'places', 
+                                                'time_words', 'question_words', 'connecting_words')  
+                             )) %>% 
+    arrange(bin, category, age.50, age.70, age.30) %>% 
     select(everything(), -age_distr, -age_distr_prob, 
-           age_distr, age_distr_prob) %>% 
-    arrange(age.50, age.70, age.30)
+           age_distr, age_distr_prob)
 
 
 

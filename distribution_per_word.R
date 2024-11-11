@@ -1,14 +1,27 @@
 library(dplyr)
 library(showtext)
 library(progress)
+f = glue::glue
 
 font_paths("./raw/JasonHandwriting-master/")
 font_add("zh", regular = "raw/JasonHandwriting-master/JasonHandwriting3p.ttf")
 font_add_google("Gochi Hand", "gochi")
 
-d = readr::read_csv("made/MCDI.age.csv")
+d = readr::read_csv("made/MCDI.age.csv") %>%
+    mutate(category = factor(category, levels=c('people', 'games_routines', 
+                                                'food_drink', 'action_words', 
+                                                'animals', 'vehicles', 'toys', 
+                                                'clothing', 'outside', 
+                                                'body_parts', 'household', 
+                                                'descriptive_words', 
+                                                'furniture_rooms', 
+                                                'quantifiers', 'locations', 
+                                                'places', 'time_words', 
+                                                'question_words', 
+                                                'connecting_words')  )) %>% 
+    arrange(category, age.50)
 
-plot_word = function(idx) {
+plot_word = function(idx, base_col=1) {
     word  = d$definition[idx]
     distr = strsplit(d$age_distr_prob[idx], "|", fixed=T)[[1]] |> as.numeric()
     x_axis_lab = 8:36
@@ -22,9 +35,12 @@ plot_word = function(idx) {
     for (i in seq(distr)) {
         x_ = rep(i,2)
         y_ = c(0,distr[i])
-        c_ = stom::col.alpha(1,.65)
+        c_ = stom::col.alpha(base_col,.55)
+        if (base_col %% 8 == 2) c_ = stom::col.alpha(base_col,.35)
+        if (base_col %% 8 == 6) c_ = stom::col.alpha(base_col,.25)
+        if (base_col %% 8 == 8) c_ = stom::col.alpha(base_col, 1)
         if (length(highlight_idx) == 1 && i == highlight_idx) 
-            c_ = stom::col.alpha(2,.8)
+            c_ = 2
         lines(x_, y_, lwd=6, col=c_)
     }
     
@@ -32,26 +48,46 @@ plot_word = function(idx) {
          cex.axis=1.4, padj=-1.05, col.ticks = "white")
     axis(2, las=1, family="gochi", cex.axis=1.5)
     box(bty='L')
-    title(main=word, cex.main=3, line=2, family="zh")
+    
+    nchr = nchar(word)
+    if (nchr > 10) {
+        title(main=word, cex.main=4, line=1.5, family="zh")
+    } 
+    else if (nchr <= 2)
+        title(main=word, cex.main=5.5, line=1.5, family="zh")
+    else {
+        title(main=word, cex.main=5, line=1.5, family="zh")
+    }
+        
     title(xlab="月齡", cex.lab = 2, line=2.8, family="zh")
-    title(ylab=" 會說的比例 (%)", cex.lab = 2, line=3.5, family="zh")
+    title(ylab=" 會說的比例(%)", cex.lab = 2, line=3.5, family="zh")
     showtext_end()
 }
 
 # Testing
 # d = d[680:696, ]
+categories = levels(d$category) #[17:19]
+d2 = lapply(categories, \(x) d %>% filter(category == {{x}})) 
+names(d2) = categories
 
 nc = 4
-nr = 3
-pb <- progress_bar$new(total = nrow(d))
+nr = 4
+pdf(f("distribution_per_word.pdf"), width = 5.2 * nc, height = 3.5 * nr)
+pb <- progress_bar$new(total = length(categories))
+base_cols = seq(categories)
+base_cols[seq(1,19,by=8)] = 2  # Switch order of col=1,2
+base_cols[seq(2,19,by=8)] = 1  # Switch order of col=1,2
+for (j in seq(categories)) {
+    category = categories[j]
+    d = d2[[category]]
 
-pdf("distribution_per_word.pdf", width = 5.2 * nc, height = 3.5 * nr)
-mar = c(5, 4.9, 5.5, 2.8)
-
-par(mfrow=c(nr, nc), oma=c(0,1,0,0), mar=mar)
-for (i in 1:nrow(d)) {
-    plot_word(i)
+    # pdf(f("made/distribution_per_word/{category}.pdf"), width = 5.2 * nc, height = 3.5 * nr)
+    mar = c(5, 4.9, 5.5, 2.8)
+    par(mfrow=c(nr, nc), oma=c(0,1,0,0), mar=mar)
+    for (i in 1:nrow(d)) {
+        plot_word(i, base_col = base_cols[j])
+    }
     pb$tick()
+    # dev.off()
 }
-    
 dev.off()

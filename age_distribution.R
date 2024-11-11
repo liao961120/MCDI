@@ -1,11 +1,3 @@
-# ToDo: fix bug in age distribution
-# x = dm$age_distr[577] |> strsplit("|", fixed = TRUE) %>% .[[1]] |> as.integer() |> table()
-# 
-# x2 = c( rep(0,14), x ) / base_age
-# plot(x2)
-
-
-
 library(dplyr)
 
 dm = readr::read_csv("made/word_id.csv")
@@ -97,7 +89,8 @@ plot_AoA = function(d) {
 svglite::svglite("made/AoA-all.svg", width = 9, height = 10)
 plot_AoA(dm)
 title(main = "Age of Acquisition of 696 Words Derived from MCDI")
-title(sub = "Dots are the age groups at which 50% (interpolated) of the children produced the words", adj=0, cex.sub=.8)
+title(sub = "Dots are the age groups at which 50% (interpolated) of the children produced the words.", 
+      adj=0, cex.sub=.8)
 dev.off()
 
 dp = list(

@@ -34,7 +34,7 @@ plot_word = function(idx) {
     box(bty='L')
     title(main=word, cex.main=3, line=2, family="zh")
     title(xlab="月齡", cex.lab = 2, line=2.8, family="zh")
-    title(ylab="會說的比例 (%)", cex.lab = 2, line=3.5, family="zh")
+    title(ylab=" 會說的比例 (%)", cex.lab = 2, line=3.5, family="zh")
     showtext_end()
 }
 

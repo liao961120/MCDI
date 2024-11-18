@@ -1,7 +1,7 @@
 Age of Acquisition of 696 Words in Mandarin (Taiwan)
 ====================================================
 
-The distributions of ages at which words are produced are shown in the figures below. The first figure plots the empirical age distributions of the data collected by by Liu & Tsao (2010). The second figure plots the model-based estimates of these words' age of acquisition.
+The distributions of ages at which words are produced are shown in the figures below. The first figure plots the empirical age distributions of the data collected by by Liu & Tsao (2010). The second figure plots the model-based estimates of the words' age of acquisition.
 
 Liu & Tsao (2010)'s data is available from the Wordbank project (Frank et al., 2017) at <https://github.com/langcog/wordbank>.
 

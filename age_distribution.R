@@ -85,10 +85,11 @@ dm = dm %>%
     select(everything(), -age_distr_base, -age_distr, -age_distr_prob, 
            age_distr_base, age_distr, age_distr_prob)
 
+readr::write_csv(dm, "made/MCDI.age.csv")
+writexl::write_xlsx(dm, "MCDI.age.xlsx")
 
 
-
-
+dm = dm %>% arrange(age.50)
 
 plot_AoA = function(d) {
     plot(1, type="n", xlim=range(d$age.25-1, d$age.75+1), ylim=c(1,nrow(d)), yaxt='n', 
@@ -107,7 +108,7 @@ plot_AoA = function(d) {
          lwd.ticks = 0, hadj = 1)
 }
 
-svglite::svglite("made/AoA-all.svg", width = 9, height = 10)
+svglite::svglite("made/AoA-all-emp.svg", width = 9, height = 10)
 plot_AoA(dm)
 title(main = "Age of Acquisition of 696 Words Derived from MCDI")
 title(sub = "Dots are the age groups at which 50% (interpolated) of the children produced the words.", 
@@ -119,7 +120,7 @@ dp = list(
     dm[234:464,],
     dm[465:696,]
 )
-svglite::svglite("made/AoA.svg", width = 12, height = 6)
+svglite::svglite("made/AoA-emp.svg", width = 12, height = 6)
 par(mfrow=c(1,3))
 
 for (j in 1:3) {
@@ -128,5 +129,4 @@ for (j in 1:3) {
 dev.off()
 
 
-readr::write_csv(dm, "made/MCDI.age.csv")
-writexl::write_xlsx(dm, "MCDI.age.xlsx")
+

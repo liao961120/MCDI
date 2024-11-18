@@ -61,6 +61,7 @@ d1 = d0 %>%
 readr::write_csv(d1, "made/MCDI.age.m.csv")
 writexl::write_xlsx(d1, "MCDI.age.m.xlsx")
 
+plot(d1$age.50, d1$age.50.m, pch=19, cex=.8,col=col.alpha(2,.6), xlab="Empirical", ylab="Model-based Estimate", main="AoA of Words from MCDI"); abline(0,1, h=36,v=36,col="grey")
 
 d1 = d1 %>% arrange(age.50.m)
 ## Model-based AoA
@@ -88,7 +89,7 @@ plot_AoA(d1)
 title(main = "Age of Acquisition of 696 Words Derived from MCDI")
 subs = c(
     "Dots are model-based estimates of the ages at which there is a 50% probability producing the words.",
-    "The left and right ends of the bars represent the corresponding estimates for 25% and 75% probabilities, respectively."
+    "The left and right ends of the bars represent the corresponding estimates for probabilities of 25% and 75%, respectively."
 )
 title(sub = subs[1], cex.sub=.8, adj=1)
 title(sub = subs[2], cex.sub=.8, adj=1, line=4.8)

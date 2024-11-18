@@ -13,6 +13,8 @@ dWS = readr::read_csv("raw/MandarinTaiwaneseWS_Liu_data.csv") %>%
 base_age = c( dWS$age, dWG$age ) |> table()
 base_age_levels = names(base_age)
 
+dm$age_distr_base = sapply(1:nrow(dm), \(i) paste(base_age, collapse="|"))
+
 dm$age_distr = sapply(1:nrow(dm), \(i) {
     G = dm$item.WG[i]
     S = dm$item.WS[i]
@@ -53,9 +55,9 @@ word_age = function(age_distr, cuttoff=.5, Max=40) {
         return(aM)
     }, USE.NAMES = F)
 }
-dm$age.70 = word_age(dm$age_distr, cuttoff=.7, Max=40)
-dm$age.50 = word_age(dm$age_distr, cuttoff=.5, Max=40)
-dm$age.30 = word_age(dm$age_distr, cuttoff=.3, Max=40)
+dm$age.75 = word_age(dm$age_distr, cuttoff=.75, Max=40)
+dm$age.50 = word_age(dm$age_distr, cuttoff=.50, Max=40)
+dm$age.25 = word_age(dm$age_distr, cuttoff=.25, Max=40)
 
 dm = dm %>% 
     mutate(n = sapply(strsplit(age_distr, "|", fixed=T), \(x) sum(as.integer(x))) ) %>% 
@@ -79,9 +81,9 @@ dm = dm %>%
                                                 'locations',  'places', 
                                                 'time_words', 'question_words', 'connecting_words')  
                              )) %>% 
-    arrange(bin, category, age.50, age.70, age.30) %>% 
-    select(everything(), -age_distr, -age_distr_prob, 
-           age_distr, age_distr_prob)
+    arrange(bin, category, age.50, age.75, age.25) %>% 
+    select(everything(), -age_distr_base, -age_distr, -age_distr_prob, 
+           age_distr_base, age_distr, age_distr_prob)
 
 
 
@@ -89,12 +91,12 @@ dm = dm %>%
 
 
 plot_AoA = function(d) {
-    plot(1, type="n", xlim=range(d$age.30-1, d$age.70+1), ylim=c(1,nrow(d)), yaxt='n', 
+    plot(1, type="n", xlim=range(d$age.25-1, d$age.75+1), ylim=c(1,nrow(d)), yaxt='n', 
          xaxt="n", xlab="Age (month)", ylab="")
     abline(v = seq(12, 36, by=1), col="lightgrey" )
     for (i in 1:nrow(d)) {
         y_ = c(i,i)
-        x_ = c(d$age.30[i], d$age.70[i])
+        x_ = c(d$age.25[i], d$age.75[i])
         m_ = d$age.50[i]
         lines(x_, y_, lwd=1, col=stom::col.alpha(2,.4))
         points(m_, y_[1], pch=19, col=2, cex=.5)

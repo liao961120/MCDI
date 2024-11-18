@@ -1,3 +1,8 @@
 *.xlsx
 *.svg
 *.pdf
+*.exe
+*.RDS
+eng_ws_raw_data.Rds
+
+init/

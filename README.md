@@ -14,8 +14,8 @@ The distributions of ages at which words are produced are shown in the figures b
 Data
 ----
 
-Liu & Tsao (2010)'s data is available from the Wordbank project (Frank et al., 2017) at <https://github.com/langcog/wordbank>.
-Raw data (copied from [Wordbank](https://github.com/langcog/wordbank)) can be found in `raw/`, and the age distribution data is available in `made/MCDI.age.csv`. The model-based estimates are found in `made/MCDI.age.m.csv`, and the code for fitting the model is found in `model_based_analysis.R` and `model.stan`.
+Liu & Tsao (2010)'s data is available from the Wordbank project (Frank et al., 2017) at <https://wordbank.stanford.edu/data/>.
+Raw data can be found in `raw/`, and the age distribution data is available in `made/MCDI.age-production.csv`. The model-based estimates are found in `made/MCDI.age.m-produciton.csv`, and the code for fitting the model is found in `model_based_analysis.R` and `model.stan`.
 
 
 References

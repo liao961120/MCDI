@@ -9,6 +9,16 @@ $
 $ "[Priors]" $
 
 $
-48 #h(2pt) "AoA"_w &tilde "Beta"(1.5,1.5) #h(8pt) script(("AoA"_w in "[0,48]")) \ 
+"AoA"_w/48 &tilde "Beta"(1.5,1.5) #h(8pt) script(("AoA"_w in "[0,48]")) \ 
 D_(w[i])           &tilde "Exponential"(1)
 $
+
+
+// GLM-based AoA estimates (Frank et al., 2021)
+// $
+// & Y_i        tilde "Bernoulli"(p) \ 
+// & "logit"(p) = beta "Age"_i + k \ \
+// & arrow.r.double underbrace("logit"(.5), 0) = beta "AoA"_w + k \ 
+// & arrow.r.double "AoA"_w       = (-k)/beta
+// $
+

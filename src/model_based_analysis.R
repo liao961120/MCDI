@@ -1,8 +1,8 @@
 library(stom)
 library(dplyr)
 
-d0 = readr::read_csv("made/MCDI.age.csv")
-fit = readRDS("made/model.RDS")
+d0 = readr::read_csv("made/MCDI.age-production.csv")
+fit = readRDS("made/model-production.RDS")
 
 ####################
 ##### Diagnose #####
@@ -39,13 +39,13 @@ d1 = d0 %>%
         D        = D$mean
     ) %>% 
     mutate(bin = case_when(
-        age.50.m < 18 ~  "12~18",
+        age.50.m < 18                  ~  "12~18",
         18 <= age.50.m & age.50.m < 24 ~  "18~24",
         24 <= age.50.m & age.50.m < 30 ~  "24~30",
         30 <= age.50.m & age.50.m < 36 ~  "30~36",
         TRUE                           ~  "大於36"
-    )) %>% 
-    mutate(bin = ordered(bin, levels = c("12~18","18~24","24~30","30~36","大於36") )) %>% 
+    )) %>%
+    mutate(bin = ordered(bin, levels = c("12~18","18~24","24~30","30~36","大於36") )) %>%
     mutate(category = factor(category, levels=c('people', 
                                                 'games_routines', 'action_words', 
                                                 'food_drink', 'animals', 'outside',  
@@ -57,11 +57,14 @@ d1 = d0 %>%
                                                 'locations',  'places', 
                                                 'time_words', 'question_words', 'connecting_words')  
     )) %>% 
-    arrange(bin, category, age.50.m, D)
-readr::write_csv(d1, "made/MCDI.age.m.csv")
-writexl::write_xlsx(d1, "MCDI.age.m.xlsx")
+    arrange(bin, category, age.50.m, D) %>% 
+    select(-bin)
 
-plot(d1$age.50, d1$age.50.m, pch=19, cex=.8,col=col.alpha(2,.6), xlab="Empirical", ylab="Model-based Estimate", main="AoA of Words from MCDI"); abline(0,1, h=36,v=36,col="grey")
+readr::write_csv(d1, "made/MCDI.age.m-produciton.csv")
+writexl::write_xlsx(d1, "made/MCDI.age.m-produciton.xlsx")
+
+# plot(d1$age.50, d1$age.50.m, pch=19, cex=.8,col=col.alpha(2,.6), xlab="Empirical", 
+#      ylab="Model-based Estimate", main="AoA of Words from MCDI"); abline(0,1, h=36,v=36,col="grey")
 
 d1 = d1 %>% arrange(age.50.m)
 ## Model-based AoA

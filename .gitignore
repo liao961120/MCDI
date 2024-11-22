@@ -4,5 +4,7 @@
 *.exe
 *.RDS
 eng_ws_raw_data.Rds
+wordbank_*.csv
 
 init/
+.snakemake

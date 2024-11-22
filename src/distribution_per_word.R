@@ -1,3 +1,29 @@
+# Rscript this.R PRODUCTION
+args = commandArgs(TRUE)
+TYPE = 1
+INPUT = c(
+    "made/MCDI.age-understanding.csv",
+    "made/MCDI.age-production.csv"
+)
+OUTPUT = c(
+    "made/distribution_per_word-understanding.pdf",
+    "made/distribution_per_word-production.pdf"
+)
+YLAB = c(
+    " 理解的比例(%)",
+    " 會說的比例(%)"
+)
+
+if (length(args) > 0) {
+    if ( grepl("prod(uction)?", tolower(args[1])) ) TYPE = 2
+}
+INPUT  = INPUT[TYPE]
+OUTPUT = OUTPUT[TYPE]
+YLAB   = YLAB[TYPE]
+###########################################
+
+
+
 library(dplyr)
 library(showtext)
 library(progress)
@@ -7,7 +33,7 @@ font_paths("./raw/JasonHandwriting-master/")
 font_add("zh", regular = "raw/JasonHandwriting-master/JasonHandwriting3p.ttf")
 font_add_google("Gochi Hand", "gochi")
 
-d = readr::read_csv("made/MCDI.age.csv") %>%
+d = readr::read_csv(INPUT) %>%
     mutate(category = factor(category, levels=c('people', 'games_routines', 
                                                 'food_drink', 'action_words', 
                                                 'animals', 'vehicles', 'toys', 
@@ -21,9 +47,12 @@ d = readr::read_csv("made/MCDI.age.csv") %>%
                                                 'connecting_words')  )) %>% 
     arrange(category, age.50)
 
-plot_word = function(idx, base_col=1) {
+plot_word = function(idx, base_col=1, test=F) {
+    if (test) pdf("test.pdf")
+    
     word  = d$definition[idx]
     distr = strsplit(d$age_distr_prob[idx], "|", fixed=T)[[1]] |> as.numeric()
+    distr = c( distr, rep(0, length(8:36)-length(distr)) )
     x_axis_lab = 8:36
     highlight_idx = which(x_axis_lab == ceiling(d$age.50[idx]) )
     
@@ -39,9 +68,10 @@ plot_word = function(idx, base_col=1) {
         if (base_col %% 8 == 2) c_ = stom::col.alpha(base_col,.35)
         if (base_col %% 8 == 6) c_ = stom::col.alpha(base_col,.25)
         if (base_col %% 8 == 8) c_ = stom::col.alpha(base_col, 1)
-        if (length(highlight_idx) == 1 && i == highlight_idx) 
+        if ( length(highlight_idx) == 1 && i == highlight_idx && any(distr >= 50) ) 
             c_ = 2
-        lines(x_, y_, lwd=6, col=c_)
+        if (y_[2] > 0)
+            lines(x_, y_, lwd=6, col=c_)
     }
     
     axis(1, at=seq(x_axis_lab), labels = x_axis_lab, family="gochi", 
@@ -60,8 +90,10 @@ plot_word = function(idx, base_col=1) {
     }
         
     title(xlab="月齡", cex.lab = 2, line=2.8, family="zh")
-    title(ylab=" 會說的比例(%)", cex.lab = 2, line=3.5, family="zh")
+    title(ylab=YLAB, cex.lab = 2, line=3.5, family="zh")
     showtext_end()
+    
+    if (test) dev.off()
 }
 
 # Testing
@@ -72,7 +104,7 @@ names(d2) = categories
 
 nc = 4
 nr = 4
-pdf(f("distribution_per_word.pdf"), width = 5.2 * nc, height = 3.5 * nr)
+pdf(OUTPUT, width = 5.2 * nc, height = 3.5 * nr)
 pb <- progress_bar$new(total = length(categories))
 base_cols = seq(categories)
 base_cols[seq(1,19,by=8)] = 2  # Switch order of col=1,2

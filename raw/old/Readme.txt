@@ -1,0 +1,1 @@
+These data were downloaded from <https://github.com/langcog/wordbank/tree/master/raw_data>, which, strangely, do not seem to match the data downloaded from Wordbank's website interface <https://wordbank.stanford.edu/data/?name=instrument_data>.

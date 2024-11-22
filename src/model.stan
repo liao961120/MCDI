@@ -5,14 +5,14 @@ data {
     array[n_obs] int<lower=1> N;    // num of trials
     array[n_obs] int<lower=1> wid;  // word id
     array[n_obs] real<lower=0> Age; // child age
-
+    real<lower=0> max_AoA;
 }
 parameters {
     vector<lower=0>[nw] D;  // Discrimination of acquisition
     vector<lower=0,upper=1>[nw] AoA_raw; 
 }
 transformed parameters {
-    vector[nw] AoA = AoA_raw * 48;  // Age of acquisition of words
+    vector[nw] AoA = AoA_raw * max_AoA;  // Age of acquisition of words
 }
 model {
     D ~ exponential(1);

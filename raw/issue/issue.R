@@ -30,24 +30,26 @@ plot_word = function(d, english_gloss, ...) {
     axis(1, at=1:nrow(dat), labels=dat$age)
 }
 
-
 # CDI data retrieved from <https://wordbank.stanford.edu/data/?name=instrument_data> (Full Child-by-Word Data)
-url = "https://raw.githubusercontent.com/liao961120/MCDI/refs/heads/main/raw/issue"
-src = c(
-    "Mandarin (Taiwan)"  = file.path(url, "wordbank_instrument_data_MandarinTW_WG.csv"),
-    "English (American)" = file.path(url, "wordbank_instrument_data_Eng_WG.csv")
+temp = tempfile()
+download.file("https://raw.githubusercontent.com/liao961120/MCDI/refs/heads/main/raw/issue/wordbank_instrument_data.zip",temp)
+dat = list(
+    "Mandarin (Taiwan)"  = unz(temp, "wordbank_instrument_data_MandarinTW_WG.csv") %>% get_age_distr_dat(),
+    "English (American)" = unz(temp, "wordbank_instrument_data_Eng_WG.csv") %>% get_age_distr_dat()
 )
 
 # English (American) WG data
-get_age_distr_dat(src["English (American)"])
+dat[["English (American)"]]
 # Mandarin (Taiwan) WG data
-get_age_distr_dat(src["Mandarin (Taiwan)"])
+dat[["Mandarin (Taiwan)"]]
 
 
 #### Plot words ####
-for (nm in names(src)) {
-    dat = get_age_distr_dat(src[nm], values=c("understands", "produces"))
-    par(mfrow=c(2,2))
+par(mfrow=c(2,4))
+for (nm in names(dat)) {
     for (word in c("ball", "mouth", "dog", "nose") )
-        plot_word(dat, word, main=paste0(nm, ": ", word) )
+        plot_word(dat[[nm]], word, main=paste0(nm, ": ", word) )
 }
+
+unlink(temp)
+

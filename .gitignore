@@ -9,3 +9,4 @@ wordbank_*.csv
 init/
 .snakemake
 .vscode
+!raw/issue/wordbank_*.csv

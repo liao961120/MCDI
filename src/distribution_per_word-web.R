@@ -75,7 +75,7 @@ plot_word = function(idx, base_col=1, test=F) {
     else if (nchr <= 2)
         title(main=word, cex.main=4, line=1.5, family="zh")
     else {
-        title(main=word, cex.main=3.5, line=1.5, family="zh")
+        title(main=word, cex.main=4, line=1.5, family="zh")
     }
         
     title(xlab="月齡", cex.lab = 2, line=2.8, family="zh")
@@ -88,7 +88,7 @@ plot_word = function(idx, base_col=1, test=F) {
 
 
 d %>% 
-    select(wid, definition) %>% 
+    select(wid, definition, age_distr_prob) %>% 
     readr::write_csv("made/distr/map.csv")
 
 # Testing

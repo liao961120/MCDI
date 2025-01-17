@@ -10,3 +10,5 @@ init/
 .snakemake
 .vscode
 !raw/issue/wordbank_*.csv
+.Rproj.user
+made/distr
